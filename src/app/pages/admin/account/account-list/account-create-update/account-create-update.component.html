@@ -1,0 +1,59 @@
+<form [formGroup]="form">
+  <div fxLayout="row" fxLayoutAlign="start center" mat-dialog-title style="width: 400px;">
+    <h2 *ngIf="isCreateMode()" class="headline m-0 dialog-header-md"
+        fxFlex="auto">新建用户</h2>
+    <h2 *ngIf="isUpdateMode()" class="headline m-0 dialog-header-md"
+        fxFlex="auto">编辑用户：{{account.username}}</h2>
+
+    <button class="text-secondary" mat-dialog-close mat-icon-button type="button">
+      <mat-icon [icIcon]="icClose"></mat-icon>
+    </button>
+  </div>
+
+  <mat-divider class="-mx-6 text-border"></mat-divider>
+
+  <mat-dialog-content fxLayout="column">
+    <div class="flex flex-col sm:flex-row">
+      <mat-form-field class="mt-6 flex-auto">
+        <mat-label>账号</mat-label>
+        <input [readonly]="isUpdateMode()" formControlName="username" matInput>
+        <mat-error *ngIf="form.get('username').hasError('required')" i18n>请输入名称</mat-error>
+      </mat-form-field>
+    </div>
+
+    <div class="flex flex-col sm:flex-row">
+      <mat-form-field class="mt-6 flex-auto">
+        <mat-label>密码</mat-label>
+        <input [readonly]="isUpdateMode()" type="password" formControlName="password" matInput>
+        <mat-error *ngIf="form.get('password').hasError('required')" i18n>请输入密码</mat-error>
+      </mat-form-field>
+    </div>
+
+    <div class="flex flex-col sm:flex-row">
+      <mat-form-field class="mt-6 flex-auto">
+        <mat-label>邮箱</mat-label>
+        <input formControlName="email" matInput>
+        <mat-error *ngIf="form.get('email').hasError('required')" i18n>请输入邮箱</mat-error>
+        <mat-error *ngIf="form.get('email').hasError('email')" i18n>邮箱格式有误</mat-error>
+      </mat-form-field>
+    </div>
+
+    <div class="flex flex-col sm:flex-row">
+      <mat-form-field class="mt-6 flex-auto">
+        <mat-label>用户组</mat-label>
+        <mat-select formControlName="gid">
+          <mat-option *ngFor="let group of authGroup$ | async" [value]="group.id">
+            {{group.name}}
+          </mat-option>
+        </mat-select>
+        <mat-error *ngIf="form.get('gid').hasError('required')" i18n>必须选择一个用户组</mat-error>
+      </mat-form-field>
+    </div>
+  </mat-dialog-content>
+
+  <mat-dialog-actions align="end">
+    <button mat-button mat-dialog-close type="button">取消</button>
+    <button *ngIf="isCreateMode()" color="primary" [disabled]="form.invalid" mat-button [vexAsyncButton]="createAccount()">创建</button>
+    <button *ngIf="isUpdateMode()" color="primary" [disabled]="form.invalid" mat-button [vexAsyncButton]="updateAccount()">更新</button>
+  </mat-dialog-actions>
+</form>

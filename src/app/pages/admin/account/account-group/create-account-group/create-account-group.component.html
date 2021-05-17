@@ -1,0 +1,39 @@
+<form [formGroup]="form">
+  <div fxLayout="row" fxLayoutAlign="start center" mat-dialog-title style="width: 400px;">
+    <h2 *ngIf="isCreateMode()" class="headline m-0 dialog-header-md"
+        fxFlex="auto">新建用户组</h2>
+    <h2 *ngIf="isUpdateMode()" class="headline m-0 dialog-header-md"
+        fxFlex="auto">编辑用户组：{{defaults.name}}</h2>
+
+    <button class="text-secondary" mat-dialog-close mat-icon-button type="button">
+      <mat-icon [icIcon]="icClose"></mat-icon>
+    </button>
+  </div>
+
+  <mat-divider class="-mx-6 text-border"></mat-divider>
+
+  <mat-dialog-content fxLayout="column">
+    <div class="flex flex-col sm:flex-row">
+      <mat-form-field class="mt-6 flex-auto">
+        <mat-label>名称</mat-label>
+        <input cdkFocusInitial formControlName="name" matInput>
+        <mat-error *ngIf="form.get('name').hasError('required')" i18n>请输入名称</mat-error>
+        <mat-error *ngIf="form.get('name').hasError('maxlength')" i18n>长度不能超过10个字符</mat-error>
+        <!-- <mat-icon [icIcon]="icPerson" class="mr-3" matPrefix></mat-icon> -->
+      </mat-form-field>
+
+      <!-- <mat-form-field class="sm:mt-6 sm:ml-6 flex-auto">
+        <mat-label>Last Name</mat-label>
+        <input cdkFocusInitial formControlName="lastName" matInput>
+
+        <mat-icon [icIcon]="icPerson" class="mr-3" matPrefix></mat-icon>
+      </mat-form-field> -->
+    </div>
+  </mat-dialog-content>
+
+  <mat-dialog-actions align="end">
+    <button mat-button mat-dialog-close type="button">取消</button>
+    <button *ngIf="isCreateMode()" [vexAsyncButton]="createAuthGroup()" color="primary" mat-button>创建用户组</button>
+    <button *ngIf="isUpdateMode()" [vexAsyncButton]="updateAuthGroup()" color="primary" mat-button>更新用户组</button>
+  </mat-dialog-actions>
+</form>

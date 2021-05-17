@@ -1,0 +1,57 @@
+<div fxLayout="row" fxLayoutAlign="start center" mat-dialog-title>
+  <h2 class="headline m-0 dialog-header-md"
+      fxFlex="auto">编辑{{group.name}}权限</h2>
+
+  <button class="text-secondary" mat-dialog-close mat-icon-button type="button">
+    <mat-icon [icIcon]="icClose"></mat-icon>
+  </button>
+</div>
+
+<mat-divider class="-mx-6 text-border"></mat-divider>
+
+<mat-dialog-content fxLayout="column">
+  <div class="flex flex-col sm:flex-row">
+    <div class="bg-card rounded-full border px-4"
+          style="margin-top: 10px;margin-bottom: 10px;"
+          fxFlex="400px"
+          fxFlex.lt-md="auto"
+          fxHide.xs
+          fxLayout="row"
+          fxLayoutAlign="start center">
+      <ic-icon [icIcon]="icSearch" size="20px"></ic-icon>
+      <input [formControl]="searchCtrl"
+              class="px-4 py-3 border-0 outline-none w-full bg-transparent"
+              placeholder="搜索..."
+              type="search">
+    </div>
+  </div>
+  <div style="height: 60vh;overflow: auto;">
+    <!-- <mat-accordion> -->
+      <mat-expansion-panel *ngFor="let group of authGroup$ | async;" [expanded]="true">
+          <mat-expansion-panel-header>
+            <mat-panel-title>
+              {{group.group}}
+            </mat-panel-title>
+          </mat-expansion-panel-header>
+          <mat-list class="list">
+            <mat-list-item>
+              <mat-checkbox color="primary"
+              [checked]="isSelectedAll(group)" (change)="toggleSelectAll(group)"
+              [indeterminate]="hasSelectedAny(group) && !isSelectedAll(group)">
+                全选
+              </mat-checkbox>
+            </mat-list-item>
+            <mat-list-item *ngFor="let permission of group.permissions">
+              <mat-checkbox color="primary" [checked]="hasPermission(permission[0])" (change)="changePermission(permission[0])">{{permission[1]}}</mat-checkbox>
+            </mat-list-item>
+          </mat-list>
+        </mat-expansion-panel>
+    <!-- </mat-accordion> -->
+  </div>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+  <button mat-button mat-dialog-close type="button">取消</button>
+  <button color="primary" mat-button [disabled]="!dirty" [vexAsyncButton]="updatePermission()">确定</button>
+</mat-dialog-actions>
+

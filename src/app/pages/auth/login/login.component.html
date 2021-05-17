@@ -1,0 +1,48 @@
+<div class="w-full h-full bg-pattern" fxLayout="column" fxLayoutAlign="center center">
+  <div @fadeInUp class="card overflow-hidden w-full max-w-xs">
+    <div class="p-6 pb-0" fxLayout="column" fxLayoutAlign="center center">
+      <div class="fill-current text-center">
+        <img class="w-16" src="assets/img/Logo.png">
+      </div>
+    </div>
+
+    <div class="text-center mt-4">
+      <h2 class="title m-0">{{name}}</h2>
+      <h4 class="body-2 text-secondary m-0" i18n>请先登录</h4>
+    </div>
+
+    <div [formGroup]="form" class="p-6" fxLayout="column" fxLayoutGap="16px">
+      <div fxFlex="auto" fxLayout="column">
+        <mat-form-field fxFlex="grow">
+          <mat-label i18n>账号</mat-label>
+          <input formControlName="username" matInput required>
+          <mat-error *ngIf="form.get('username').hasError('required')" i18n>请输入账号</mat-error>
+        </mat-form-field>
+        <mat-form-field fxFlex="grow">
+          <mat-label i18n>密码</mat-label>
+          <input [type]="inputType" formControlName="password" matInput required>
+          <button (click)="toggleVisibility()" mat-icon-button matSuffix i18n-matTooltip matTooltip="切换可见" type="button">
+            <mat-icon *ngIf="visible" [icIcon]="icVisibility"></mat-icon>
+            <mat-icon *ngIf="!visible" [icIcon]="icVisibilityOff"></mat-icon>
+          </button>
+          <!-- <mat-hint>Click the eye to toggle visibility</mat-hint> -->
+          <mat-error *ngIf="form.get('password').hasError('required')" i18n>请输入密码</mat-error>
+        </mat-form-field>
+      </div>
+
+      <div fxLayout="row" fxLayoutAlign="space-between center">
+        <mat-checkbox formControlName="remember" class="caption" color="primary" i18n>保持登录状态</mat-checkbox>
+        <a [routerLink]="['/forgot-password']" class="caption" i18n>忘记密码?</a>
+      </div>
+      <!--  -->
+      <button [vexAsyncButton]="send()" color="primary" mat-raised-button type="button" [disabled]="form.invalid">
+        <span i18n #loading>登录</span>
+      </button>
+
+      <p class="text-secondary text-center">
+        <span i18n>还没有账号?</span><br/>
+        <a [routerLink]="['/register']" i18n>点击此处注册</a>
+      </p>
+    </div>
+  </div>
+</div>
